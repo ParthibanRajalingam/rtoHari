@@ -1,0 +1,21 @@
+<form class="example-form">
+      <mat-form-field class="example-full-width">
+      <input type="text" placeholder="Pick State" aria-label="Number" matInput [formControl]="stateControl" 
+      [matAutocomplete]="auto2">
+      <mat-autocomplete #auto2="matAutocomplete" (optionSelected)='getFilteredDistricts($event.option.value)'>
+        <mat-option *ngFor="let state of filteredStates | async" [value]="state.Name">
+          {{state.Name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+        <input type="text" placeholder="Pick Districs" aria-label="Number" matInput [formControl]="districtControl" 
+        [matAutocomplete]="auto3">
+        <mat-autocomplete #auto3="matAutocomplete" >
+          <mat-option *ngFor="let district of districts" [value]="district.Name">
+            {{district.Name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+  </form>

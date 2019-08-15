@@ -1,0 +1,38 @@
+
+<header class="clearfix">
+  <div class="container">
+    <div class="header-left">
+      <h1>Your company</h1>
+    </div>
+    <div class="header-right">
+      <label for="open">
+        <span class="hidden-desktop"></span>
+      </label>
+      <input type="checkbox" name="" id="open">
+      <nav>
+          <a 
+          *ngFor="let link of navLinks"
+          [routerLink]="link.link"
+         >
+         {{link.label}}
+       </a>
+     
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- <nav mat-tab-nav-bar>
+  <a mat-tab-link
+     *ngFor="let link of navLinks"
+     [routerLink]="link.link"
+     routerLinkActive 
+     #rla="routerLinkActive"
+     [routerLinkActiveOptions]="{exact: true}"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav> -->
+
+
+<router-outlet></router-outlet>
