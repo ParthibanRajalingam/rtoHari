@@ -2,10 +2,11 @@
 <form [formGroup] = "basicSearchForm">
   <mat-form-field class="example-full-width">
     <input matInput placeholder="Code" formControlName="codeSearch" required>
-    <mat-hint>Sample code : TN0007</mat-hint>
+    <mat-hint>Sample code : TN07</mat-hint>
     <mat-error>
       <app-validation [control] = "basicSearchForm.controls.codeSearch" ></app-validation>
     </mat-error>
   </mat-form-field>
   <button type = "submit" mat-button color="primary" [disabled] = "!basicSearchForm.valid" (click) ="onSearch()" >Search</button>
 </form>
+<app-results [res]="searchResults"></app-results>

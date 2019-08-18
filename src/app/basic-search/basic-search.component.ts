@@ -10,7 +10,7 @@ import { ApiService } from '../service/api.service';
   styleUrls: ['./basic-search.component.css']
 })
 export class BasicSearchComponent implements OnInit  {
-
+res : any ;
 
   basicSearchForm = this.fb.group({
   codeSearch: ['', [Validators.required, Validators.maxLength(4), ValidationService.codeNumberValidator]],
@@ -28,6 +28,7 @@ onSearch() {
     data => {
       console.log(data);
       this.searchResults = data;
+      this.res = data;
     }
   );
 }

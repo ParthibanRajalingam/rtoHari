@@ -41,7 +41,7 @@ import { ContactUsModule } from './featureModules/contact-us/contact-us.module';
 //Interceptor
 import {HttpClientModule , HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiInterceptor } from './service/api.interceptor';
-import { ResultsComponent } from './results/results.component';
+
 import { HeadersComponent } from './headers/headers.component';
 import { FootersComponent } from './footers/footers.component';
 
@@ -50,7 +50,7 @@ import { FootersComponent } from './footers/footers.component';
     AppComponent,
     BasicSearchComponent,
     TabsComponent,
-    ResultsComponent,
+    
     HeadersComponent,
     FootersComponent
   ],

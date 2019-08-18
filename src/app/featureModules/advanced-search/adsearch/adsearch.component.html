@@ -1,21 +1,34 @@
-<form class="example-form">
+<form [formGroup] = "advancedSearchForm">
       <mat-form-field class="example-full-width">
-      <input type="text" placeholder="Pick State" aria-label="Number" matInput [formControl]="stateControl" 
+      <input type="text" placeholder="Pick State" aria-label="Number" matInput formControlName="stateControl" 
       [matAutocomplete]="auto2">
       <mat-autocomplete #auto2="matAutocomplete" (optionSelected)='getFilteredDistricts($event.option.value)'>
         <mat-option *ngFor="let state of filteredStates | async" [value]="state.Name">
           {{state.Name}}
         </mat-option>
       </mat-autocomplete>
+      <mat-error>
+        <app-validation [control] = "advancedSearchForm.controls.stateControl" ></app-validation>
+      </mat-error>
+
     </mat-form-field>
 
-    <mat-form-field class="example-full-width">
-        <input type="text" placeholder="Pick Districs" aria-label="Number" matInput [formControl]="districtControl" 
+    <mat-form-field class="example-full-width" >
+        <input  type="text" placeholder="Pick Districs"  aria-label="Number" matInput  formControlName="districtControl" 
         [matAutocomplete]="auto3">
         <mat-autocomplete #auto3="matAutocomplete" >
-          <mat-option *ngFor="let district of districts" [value]="district.Name">
+          <mat-option *ngFor="let district of filteredDistricts | async" [value]="district.Name">
             {{district.Name}}
           </mat-option>
         </mat-autocomplete>
+        <mat-error>
+          <app-validation [control] = "advancedSearchForm.controls.districtControl" ></app-validation>
+        </mat-error>
+  
       </mat-form-field>
+
+
+    <button type = "submit" mat-button color="primary" [disabled] = "!advancedSearchForm.valid" (click) ="onSearch()" >Search</button>
   </form>
+
+  <app-results [res]="result"></app-results>

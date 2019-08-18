@@ -21,4 +21,12 @@ searchByCode(id) {
   return this.http.get(getUrls('searchByReg', id));
 }
 
+searchByStateId(id){
+  return this.http.get(getUrls('searchByState', id));
+}
+
+searchByStateAndDis(id,dId){
+  return this.http.get(getUrls('searchByStateAndDistrict', id));
+}
+
 }

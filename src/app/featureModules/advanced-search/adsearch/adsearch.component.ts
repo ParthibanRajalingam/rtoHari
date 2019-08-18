@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../service/api.service';
 
+import {FormBuilder, Validators} from '@angular/forms';
+
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -14,24 +16,33 @@ export class AdsearchComponent implements OnInit {
 
   states: any = [];
   districts : any =[];
+  stateId : number;
+  districtId : number;
+  result : any;
 
-  stateControl = new FormControl();
-  districtControl = new FormControl();
+  advancedSearchForm = this.fb.group({
+    stateControl: ['', [Validators.required]],
+    districtControl: [''],
+  });
 
-  filteredOptions: Observable<string[]>;
+  
+  filteredDistricts: Observable<string[]>;
   filteredStates: Observable<string[]>;
-  constructor(private api: ApiService) { }
+
+  constructor(private api: ApiService, private fb: FormBuilder) {
+    this.advancedSearchForm.get('districtControl').disable();
+   }
+
+
 
   ngOnInit() {
-
-
-    this.filteredStates = this.stateControl.valueChanges
+    this.filteredStates = this.advancedSearchForm.get('stateControl').valueChanges
     .pipe(
       startWith(''),
       map(value => this._filter(value,this.states))
     );
 
-    
+
 
     this.api.getStates().subscribe(
       data  => {
@@ -40,12 +51,8 @@ export class AdsearchComponent implements OnInit {
       }
     );
 
-    // this.api.getDistricts(2).subscribe(
-    //   data => {
-    //     this.districts = data;
-    //     console.log(data);
-    //   }
-    // );
+   
+
   }
 
   private pickNames(values : any){
@@ -65,28 +72,51 @@ export class AdsearchComponent implements OnInit {
 
   private getIds(name,sd){
     let id = 0;
-    if(sd == 's'){
-      for (let state of this.states) {
+ 
+      for (let state of sd) {
         console.log(state.Name.toLowerCase()+'----States--'+name.toLowerCase());
         if(name.toLowerCase() == state.Name.toLowerCase()){
           id = state.Id;
         }
       }
-    }
-    else{
-      for (let district of this.districts) {
-        if(name.toLowerCase() === district.Name.toLowerCase()){
-          id = district.Id;
-        }
-      }
-    }
+    
+    
     return id;
   }
 
   private getFilteredDistricts(name){
-    let id = this.getIds(name, 's');
+    
+    let id = this.getIds(name, this.states);
+    this.stateId = id;
     this.api.getDistricts(id).subscribe(data => {
         this.districts = data;
+        this.advancedSearchForm.get('districtControl').enable();
+
+        this.filteredDistricts = this.advancedSearchForm.get('districtControl').valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value,this.districts))
+        );
+
     });
+
+  }
+
+  private onSearch(){
+    this.districtId = this.getIds(this.advancedSearchForm.get('districtControl').value,this.districts);
+
+    if(this.stateId && this.districtId){
+      this.api.searchByStateAndDis(this.stateId,this.districtId).subscribe(
+        data => {console.log(data);
+        this.result = data;}
+      )
+    }
+    else{
+      this.api.searchByStateId(this.stateId).subscribe(
+        data => {console.log(data)
+        this.result= data;}
+      )
+    }
+
   }
 }
